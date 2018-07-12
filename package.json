@@ -4,6 +4,10 @@
   "description": "Generates files with random data",
   "author": "Oleksandr Boiko",
   "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/megaboich/noise-file-gen.git"
+  },
   "main": "cli.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
