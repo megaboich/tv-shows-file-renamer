@@ -8,6 +8,9 @@
     "type": "git",
     "url": "https://github.com/megaboich/noise-file-gen.git"
   },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
+  },
   "main": "cli.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
