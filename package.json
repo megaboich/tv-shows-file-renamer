@@ -1,0 +1,17 @@
+{
+  "name": "noise-file-gen",
+  "version": "1.0.0",
+  "description": "Generates files with random data",
+  "author": "Oleksandr Boiko",
+  "license": "ISC",
+  "main": "cli.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "bin": {
+    "noise-file-gen": "./cli.js"
+  },
+  "dependencies": {
+    "commander": "^2.16.0"
+  }
+}
