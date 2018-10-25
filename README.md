@@ -1,22 +1,20 @@
-# noise-file-gen
-Node.js CLI tool to generate files with random data.
-
-Generates one or several files with specified size.
+# tv-shows-file-renamer
+Node.js CLI tool to rename files for tv-shows to add S01E01 notation based on folder location
 
 ### Installation:
 ```
-npm i -g noise-file-gen
+npm i -g tv-shows-file-renamer
 ```
 
 ### Usage:
+Just call it in folder with your seasons.
 ```
-noise-file-gen --size 100 --fileName random.bin
+tv-shows-file-renamer
 ```
-Will create 100Mb file with name `random.bin` in the current directory
 
+For a dry run:
 ```
-noise-file-gen --size 10 --fileName chunk --count 100
+tv-shows-file-renamer --dry
 ```
-Will create 100 files with size 10Mb each with names from `chunk_0` to `chunk_99`
 
 Enjoy!

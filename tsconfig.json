@@ -1,0 +1,14 @@
+﻿{
+  "compilerOptions": {
+    "target": "es2017",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "baseUrl": ".",
+    "outDir": "./build",
+    "sourceMap": false,
+    "inlineSourceMap": true,
+    "removeComments": false,
+    "strict": true,
+    "lib": ["es2017"]
+  }
+}
