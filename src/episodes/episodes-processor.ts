@@ -60,13 +60,15 @@ export class EpisodesProcessor {
       episode.meta = meta.find(
         m => m.absoluteNumber === episode.episodeAbsoluteNumber
       );
-      episode.targetRelativeFilenames = episode.originalFilenames.map(fn =>
-        EpisodesProcessor.buildTargetFileName(
-          fn,
-          episode,
-          maxEpisodeNumberLength
-        )
-      );
+      if (episode.meta) {
+        episode.targetRelativeFilenames = episode.originalFilenames.map(fn =>
+          EpisodesProcessor.buildTargetFileName(
+            fn,
+            episode,
+            maxEpisodeNumberLength
+          )
+        );
+      }
     }
 
     return episodes;

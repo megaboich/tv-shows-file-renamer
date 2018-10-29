@@ -105,7 +105,7 @@ export class TheTvDbMetadataProvider {
 
     if (firstPageData.last > 1) {
       const promises = [];
-      for (let pageIndex = 2; pageIndex < firstPageData.last; ++pageIndex) {
+      for (let pageIndex = 2; pageIndex <= firstPageData.last; ++pageIndex) {
         promises.push(this.getEpisodesMetaByPage(seriesId, pageIndex));
       }
       const allPages = await Promise.all(promises);
