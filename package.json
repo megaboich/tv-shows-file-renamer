@@ -1,6 +1,6 @@
 {
   "name": "tv-shows-file-renamer",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "CLI tool to rename files for tv-shows to add S01E01 notation based on folder location",
   "author": "Oleksandr Boiko",
   "license": "ISC",
@@ -15,18 +15,24 @@
   "scripts": {
     "watch": "tsc --watch",
     "build": "rimraf ./build && tsc && node ./tools/add-exec-mime.js ./build/cli.js",
-    "prettier": "prettier --write \"**/*.{ts,js,json,css,less}\""
+    "prettier": "prettier --write \"**/*.{ts,js,json,css,less}\"",
+    "prepublish": "npm run build"
   },
   "bin": {
     "tv-shows-file-renamer": "./build/cli.js"
   },
+  "files": [
+    "/build"
+  ],
   "dependencies": {
-    "@types/fs-extra": "^5.0.4",
-    "@types/node": "^10.12.0",
     "axios": "^0.18.0",
     "chalk": "^2.4.1",
     "commander": "^2.16.0",
-    "fs-extra": "^7.0.0",
+    "fs-extra": "^7.0.0"
+  },
+  "devDependencies": {
+    "@types/fs-extra": "^5.0.4",
+    "@types/node": "^10.12.0",
     "prettier": "^1.14.3",
     "rimraf": "^2.6.2",
     "typescript": "^3.1.3"
