@@ -5,6 +5,7 @@ import { getAllFilesFlat } from "./helpers/get-all-files-flat";
 import { TheTvDbMetadataProvider } from "./episodes/thetvdb-metadata-provider";
 import { EpisodesProcessor } from "./episodes/episodes-processor";
 import { moveFile } from "./helpers/move-file";
+import { convertFileToUtf8 } from "./helpers/encoding-convertor";
 
 async function main() {
   console.log("TV shows file renamer 0.3");
@@ -15,12 +16,15 @@ async function main() {
     .version("0.1.0")
     .option("-s, --slug [value]", "Series slug")
     .option("-d, --dry", "Dry run")
+    .option("-e, --encodesubtitles [value]", "Fix encoding of subtitles from provided to unicode")
     .parse(process.argv);
 
   const dryRun = !!cmdParams.dry;
   if (dryRun) {
     console.log("Dry run dude!");
   }
+
+  const encodesubtitles = cmdParams.encodesubtitles;
 
   const slug: string = cmdParams.slug;
   if (!slug) {
@@ -51,10 +55,14 @@ async function main() {
         const sourceFn = episode.originalFilenames[fi];
         const sourceRelativeFn = sourceFn.replace(cwd, "");
         const targetRelativeFn = episode.targetRelativeFilenames[fi];
-        console.log(`${sourceRelativeFn}  -->  ${targetRelativeFn}`);
-
+        const targetFilename = path.join(cwd, targetRelativeFn);
+        const ext = path.extname(targetFilename);
+        console.log(`${sourceRelativeFn}  -->  ${targetRelativeFn} (${ext})`);
         if (!dryRun) {
-          moveFile(sourceFn, path.join(cwd, targetRelativeFn));
+          moveFile(sourceFn, targetFilename);
+          if (ext === ".srt" && encodesubtitles) {
+            convertFileToUtf8(targetFilename, encodesubtitles);
+          }
         }
       }
       console.log("---------");
