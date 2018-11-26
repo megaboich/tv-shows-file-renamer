@@ -44,6 +44,7 @@ async function main() {
   if (saveMeta) {
     console.log("Save meta to META.json");
     fs.writeFileSync(path.join(cwd, "META.json"), JSON.stringify(meta, null, 2));
+    return;
   }
 
   const allFiles = getAllFilesFlat(cwd);
