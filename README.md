@@ -57,4 +57,6 @@ Commandline parameters:
 | -e  | encode subtitles      | Performs re-encoding of `*.srt` files from specified encoding to **UTF-8**                                                                                                                                                                                                          | `-e cp1251`    |
 
 Please use it on your own risk, if you are not sure please make backup of your data first!
-LICENCE: MIT
+
+
+Licence: [MIT](https://opensource.org/licenses/MIT)
