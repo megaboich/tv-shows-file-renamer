@@ -1,4 +1,5 @@
 import * as path from "path";
+import * as fs from "fs-extra";
 import * as commander from "commander";
 import * as chalk from "chalk";
 import { getAllFilesFlat } from "./helpers/get-all-files-flat";
@@ -16,6 +17,7 @@ async function main() {
     .version("0.1.0")
     .option("-s, --slug [value]", "Series slug")
     .option("-d, --dry", "Dry run")
+    .option("-m, --meta", "Save metadata")
     .option("-e, --encodesubtitles [value]", "Fix encoding of subtitles from provided to unicode")
     .parse(process.argv);
 
@@ -31,12 +33,18 @@ async function main() {
     throw new Error("--slug is required");
   }
 
+  const saveMeta = !!cmdParams.meta;
+
   const tvDbLoader = new TheTvDbMetadataProvider({
     apikey: "MW5TK02DUDMSH9A4",
     username: "mega.boichetq",
     userkey: "UA27FF66EENM8BSR"
   });
   const meta = await tvDbLoader.loadSeriesMetadata(slug);
+  if (saveMeta) {
+    console.log("Save meta to META.json");
+    fs.writeFileSync(path.join(cwd, "META.json"), JSON.stringify(meta, null, 2));
+  }
 
   const allFiles = getAllFilesFlat(cwd);
   const episodes = EpisodesProcessor.getEpisodes(allFiles, meta);
@@ -45,9 +53,9 @@ async function main() {
     if (episode.meta && episode.targetRelativeFilenames) {
       console.log(
         chalk.default.yellow(`${episode.episodeAbsoluteNumber}`) +
-          ` | Season ${episode.meta.airedSeason} | Episode ${
-            episode.meta.airedEpisodeNumber
-          } | ${episode.normalizedName}`
+        ` | Season ${episode.meta.airedSeason} | Episode ${
+        episode.meta.airedEpisodeNumber
+        } | ${episode.normalizedName}`
       );
       console.log(chalk.default.green(episode.meta.episodeName));
       console.log("->");

@@ -1,4 +1,5 @@
 import * as path from "path";
+import * as sanitize from "sanitize-filename";
 import { normalizeFileName } from "../helpers/normalize-file-name";
 import { createCompareFunction } from "../helpers/create-compare-function";
 import { ensure } from "../helpers/ensure";
@@ -97,7 +98,9 @@ export class EpisodesProcessor {
       .padStart(maxEpisodeNumberLength, "0");
     let targetFileName = `S${seasonFormatted}E${episodeIndexFormatted} - ${absoluteNumberFormatted} - ${
       meta.episodeName
-    }`;
+      }`;
+    targetFileName = sanitize(targetFileName);
+
     let name = path.basename(originalFileName);
     let dotIndex = name.indexOf(".");
     const ext = dotIndex >= 0 ? name.substring(dotIndex) : "";

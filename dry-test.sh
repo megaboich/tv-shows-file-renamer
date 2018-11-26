@@ -1,0 +1,1 @@
+node ./build/cli.js -s one-piece -d -m
