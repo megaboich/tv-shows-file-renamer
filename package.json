@@ -1,6 +1,6 @@
 {
   "name": "tv-shows-file-renamer",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "CLI tool to rename files for tv-shows to add S01E01 notation based on folder location",
   "author": "Oleksandr Boiko",
   "license": "MIT",

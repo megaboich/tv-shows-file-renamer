@@ -17,7 +17,8 @@ export interface Episode {
 export class EpisodesProcessor {
   public static getEpisodes(
     flatFilenames: string[],
-    meta: EpisodeMeta[]
+    meta: EpisodeMeta[],
+    subextensions: string
   ): Episode[] {
     type EpisodesDic = { [name: string]: Episode | undefined };
     const episodesDic: EpisodesDic = {};
@@ -66,6 +67,7 @@ export class EpisodesProcessor {
           EpisodesProcessor.buildTargetFileName(
             fn,
             episode,
+            subextensions,
             maxEpisodeNumberLength
           )
         );
@@ -86,6 +88,7 @@ export class EpisodesProcessor {
   public static buildTargetFileName(
     originalFileName: string,
     episode: Episode,
+    subextensions: string,
     maxEpisodeNumberLength = 2
   ): string {
     const meta = ensure(episode.meta);
@@ -98,13 +101,28 @@ export class EpisodesProcessor {
       .padStart(maxEpisodeNumberLength, "0");
     let targetFileName = `S${seasonFormatted}E${episodeIndexFormatted} - ${absoluteNumberFormatted} - ${
       meta.episodeName
-      }`;
+    }`;
     targetFileName = sanitize(targetFileName);
 
     let name = path.basename(originalFileName);
     let dotIndex = name.indexOf(".");
-    const ext = dotIndex >= 0 ? name.substring(dotIndex) : "";
+    const ext = dotIndex >= 0 ? name.substring(dotIndex + 1) : "";
+    let extArray = ext.split(".");
+    const allowedSubExtensions = subextensions.split(",");
+    console.log("extArray: ", extArray.join("|"));
+    if (extArray.length > 1 && allowedSubExtensions.length > 0) {
+      console.log("allowedSubExtensions: ", allowedSubExtensions.join("|"));
+      let currentSubExtensions = extArray.slice(0, extArray.length - 1);
+      console.log("currentSubExtensions: ", currentSubExtensions.join("|"));
+      currentSubExtensions = currentSubExtensions.filter(ext =>
+        allowedSubExtensions.includes(ext)
+      );
+      console.log("currentSubExtensions: ", currentSubExtensions.join("|"));
+      extArray = [...currentSubExtensions, extArray[extArray.length - 1]];
+      console.log("extArray: ", extArray.join("|"));
+    }
+
     const targetFolder = `Season ${seasonFormatted}`;
-    return path.join(targetFolder, targetFileName + ext);
+    return path.join(targetFolder, targetFileName + "." + extArray.join("."));
   }
 }

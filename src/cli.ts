@@ -18,7 +18,14 @@ async function main() {
     .option("-s, --slug [value]", "Series slug")
     .option("-d, --dry", "Dry run")
     .option("-m, --meta", "Save metadata")
-    .option("-e, --encodesubtitles [value]", "Fix encoding of subtitles from provided to unicode")
+    .option(
+      "-e, --encodesubtitles [value]",
+      "Fix encoding of subtitles from provided to unicode"
+    )
+    .option(
+      "-x, --subextensions [value]",
+      "Comma-separated list of allowed sub-extensions (like for subtitles)"
+    )
     .parse(process.argv);
 
   const dryRun = !!cmdParams.dry;
@@ -35,6 +42,8 @@ async function main() {
 
   const saveMeta = !!cmdParams.meta;
 
+  const subextensions: string = cmdParams.subextensions || "";
+
   const tvDbLoader = new TheTvDbMetadataProvider({
     apikey: "MW5TK02DUDMSH9A4",
     username: "mega.boichetq",
@@ -43,20 +52,23 @@ async function main() {
   const meta = await tvDbLoader.loadSeriesMetadata(slug);
   if (saveMeta) {
     console.log("Save meta to META.json");
-    fs.writeFileSync(path.join(cwd, "META.json"), JSON.stringify(meta, null, 2));
+    fs.writeFileSync(
+      path.join(cwd, "META.json"),
+      JSON.stringify(meta, null, 2)
+    );
     return;
   }
 
   const allFiles = getAllFilesFlat(cwd);
-  const episodes = EpisodesProcessor.getEpisodes(allFiles, meta);
+  const episodes = EpisodesProcessor.getEpisodes(allFiles, meta, subextensions);
 
   for (const episode of episodes) {
     if (episode.meta && episode.targetRelativeFilenames) {
       console.log(
         chalk.default.yellow(`${episode.episodeAbsoluteNumber}`) +
-        ` | Season ${episode.meta.airedSeason} | Episode ${
-        episode.meta.airedEpisodeNumber
-        } | ${episode.normalizedName}`
+          ` | Season ${episode.meta.airedSeason} | Episode ${
+            episode.meta.airedEpisodeNumber
+          } | ${episode.normalizedName}`
       );
       console.log(chalk.default.green(episode.meta.episodeName));
       console.log("->");
@@ -69,7 +81,8 @@ async function main() {
         console.log(`${sourceRelativeFn}  -->  ${targetRelativeFn} (${ext})`);
         if (!dryRun) {
           moveFile(sourceFn, targetFilename);
-          if (ext === ".srt" && encodesubtitles) {
+          const subtitleExt = [".srt", ".ass"];
+          if (encodesubtitles && subtitleExt.includes(ext)) {
             convertFileToUtf8(targetFilename, encodesubtitles);
           }
         }
