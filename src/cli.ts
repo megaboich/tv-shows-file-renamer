@@ -47,7 +47,7 @@ async function main() {
   const tvDbLoader = new TheTvDbMetadataProvider({
     apikey: "MW5TK02DUDMSH9A4",
     username: "mega.boichetq",
-    userkey: "UA27FF66EENM8BSR"
+    userkey: "7SX0R23G7FFYMQEB"
   });
   const meta = await tvDbLoader.loadSeriesMetadata(slug);
   if (saveMeta) {
